@@ -1,3 +1,37 @@
+input[type="checkbox"] {
+    margin: 0 3px 0 18px;
+}
+
 body {
-  background: blue;
+  background-color: darkgrey;
+  text-align: center;
+  /*font-family: 'Rock Salt', cursive;*/
+  font-family: 'Coming Soon', cursive;
+  color:white;
+}
+
+h1 {
+  font-family: 'Codystar', cursive;
+  font-size: 77px;
+  margin-top: 0px;
+  margin-bottom: 10px;
+}
+
+li {
+  list-style: none;
+}
+
+button:hover {
+  background: darkgrey;
+  color: grey;
+
+}
+
+button {
+    border-style: outset;
+    padding: 1px 24px;
+    border-radius: 5px;
+    background: grey;
+    color: darkgrey;
+    font-size: 50px;
 }
