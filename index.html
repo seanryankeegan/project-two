@@ -4,71 +4,90 @@
     <meta charset="utf-8">
     <title>Sean's project two</title>
     <link rel="stylesheet" href="style.css" media="screen" title="no title" charset="utf-8">
-<link href='https://fonts.googleapis.com/css?family=Anton|Sigmar+One|Coming+Soon|Rock+Salt|Codystar' rel='stylesheet' type='text/css'>  </head>
+<link href='https://fonts.googleapis.com/css?family=Coming+Soon|Codystar' rel='stylesheet' type='text/css'>  </head>
   <body>
-    <h1>Movie info</h1>
+
+    <div class="header">
+      <h1 id="title">Movie info</h1>
+    </div>
+
+    <div class="all_content">
       <form>
 
         <label> Pick a movie:
           <input id="movie-search" type="text" placeholder=" Enter movie title"/>
         </label>
         <br>
-        <!-- <br> -->
-
-        <!-- <label>
-          <input type="checkbox" value="omdb" class="checkbox" name="checkbox">General info
-          <input type="checkbox" value="ny_times" class="checkbox" name="checkbox">Link to NY Times Review
-          <input type="checkbox" value="guidebox" class="checkbox" name="checkbox">Available streaming platforms
-        </label> -->
 
         <button id="submit-btn" type="button" name="submit">SEARCH</button> <br><br>
 
 
-        <label for="">Choose Your Sources (Defaults to all)
-            <input type="checkbox" class="source-checkbox" name="source-checkbox" value="info">General Info
-            <input type="checkbox" class="source-checkbox" name="source-checkbox" value="ny_times">NY Times Review
-            <input type="checkbox" class="source-checkbox" name="source-checkbox" value="guidebox">Available streaming platforms
+        <label for="">What would you like to see?
+            <input type="checkbox" id="nyTimes_checkbox" class="source-checkbox" name="source-checkbox" value="ny_times">NY Times Review
+            <input type="checkbox" id="stream_checkbox" class="source-checkbox" name="source-checkbox" value="guidebox">Available streaming platforms
           </label>
         <br><br>
 
       </form>
 
       <div id="content-placeholder">
-        <!-- Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. -->
       </div>
-
-<!-- {{#if owner.realname}}
-         <p>Photo by {{owner.realname}}</p>
-       {{else}}
-         <p>Photo by {{owner.username}}
-       {{/if}} -->
-
+    </div>
 
     <script id="movie_template" type="text/x-handlebars-template">
-      <h2>{{title}}</h2>
-      <p>{{plot}}</p>
-      <p>Actors: {{actors}}</p>
-      <p>Rated: {{rated}}, released: {{year}}</p>
-      <p>Rotten Tomatoes Score: {{tomatoRating}}</p>
+      <h1>{{title}}</h1>
+      <div class = "parent_container">
+        <div class = "hb_content column">
+          <p><img src="{{picture}}"></p>
+        </div>
 
-      {{#if timesLinkText}}
-      <p>Reviews:</p>
-      <a href="{{timesURL}}">{{timesLinkText}}</a>
-      {{else}}
-      <p>No NY Times review available.</p>
-      {{/if}}
+        <div class = "hb_content">
+          <!-- Basic info always shown if movie returns match
+              in the OMDB API database. -->
+          <p>{{plot}}</p>
+          <p>Cast: {{actors}}</p>
+          <p>Rated: {{rated}}, released: {{year}}</p>
+          <p>Rotten Tomatoes Score: {{tomatoRating}}</p>
 
 
-      <p><img src="{{picture}}"></p>
-      <p>Find this movie streaming on:</p>
+        <!-- NY Times info. Updating based on whether there is a review and
+            whether or not user wants the link -->
+          {{#if timesLinkText}}
+            {{#if dontPrint}}
+              <p></p>
+              {{else}}
+              <p><b>Reviews:</b></p>
+              <a href="{{timesURL}}">{{timesLinkText}}</a>
+              {{/if}}
+          {{else}}
+          <p><span>No NY Times review available.</span></p>
+          {{/if}}
 
-      {{#if sources}}
-        {{#each sources}}
-        <p>{{this}}</p>
-        {{/each}}
-      {{else}}
-      <p>None available.</p>
-      {{/if}}
+
+          <!-- Streaming info section -->
+          {{#if dontPrintResources}}
+          <p></p>
+          {{/if}}
+
+          {{#if printResources}}
+            {{#if sources}}
+              <p><b>Find this movie streaming on:</b></p>
+                {{#each sources}}
+                <p class="stream_list">{{this}}</p>
+                {{/each}}
+              {{else}}
+              <p><span>This movie is not currently available to be streamed.</span></p>
+            {{/if}}
+          {{/if}}
+        </div>
+        <!-- End of streaming info section -->
+
+
+        <div class = "hb_content column">
+          <p><img src="{{picture}}"></p>
+        </div>
+      </div>       <!-- end of parent container -->
+
   </script>
 
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.5/handlebars.js"></script>

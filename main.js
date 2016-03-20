@@ -6,9 +6,6 @@ document.addEventListener("DOMContentLoaded", function(event){
   var submitButton = document.querySelector('#submit-btn');
   var movieInfo = {};
   var contentContainer = document.querySelector('#content-placeholder');
-  var movieID = "tt0407887";
-  // working URL for nytimes review below
-  // url: "http://api.nytimes.com/svc/movies/v2/reviews/search?query=%27how%20to%20lose%20a%20guy%20in%2010%20days%27&api-key=3c03bdd643b85d2306455896d5df614b:14:74709955",
 
   submitButton.addEventListener('click', function(){
     movieInfo = {};
@@ -32,9 +29,22 @@ document.addEventListener("DOMContentLoaded", function(event){
           movieInfo.tomatoRating = response.tomatoRating;
           movieInfo.tomatoPic = response.tomatoImage;
           movieInfo.id = response.imdbID;
-          getReview(movieInfo);
-          getGuideBoxID(movieInfo);
-          console.log("movieInfo   is: ", movieInfo);
+          if (document.querySelector('#nyTimes_checkbox:checked')){
+            getReview(movieInfo);
+          } else {
+            movieInfo.timesLinkText = true;
+            movieInfo.dontPrint = true;
+            console.log("movieinfo times is: ", movieInfo.timesLinkText);
+          }
+          if (document.querySelector('#stream_checkbox:checked')){
+            movieInfo.printResources = true;
+            getGuideBoxID(movieInfo);
+            console.log("in getGuideBoxID checkedbox");
+          } else {
+            movieInfo.dontPrintResources = true;
+            getPictureOnly(movieInfo);
+            console.log("in else of guidebox, and movieInfo.dontPrintResources is: ", movieInfo.dontPrintResources);
+          }
         } else {
           console.log("response is: ", response);
           contentContainer = document.querySelector('#content-placeholder').innerHTML = "Can't find your selection, try again!";
@@ -47,8 +57,7 @@ document.addEventListener("DOMContentLoaded", function(event){
 
   }) //end of submit button event listener;
 
-
-})
+}) // end of window onload function
 
 var getReview = function(obj){
   $.ajax({
@@ -90,12 +99,27 @@ var runHandlebars = function(obj) {
 
 }
 
-var getGuideBoxID = function(obj) {
 
+// ***This function gets the picture from guidebox and appends all info.  Movie poster not available through OMDB API.
+var getPictureOnly = function(obj) {
   $.ajax({
-    // url: 'http://api.nytimes.com/svc/movies/v2/reviews/search?query=%27big%27&api-key=3c03bdd643b85d2306455896d5df614b:14:74709955',
     url: "https://api-public.guidebox.com/v1.43/US/rKwNUv86qWPdUIaMOejW5NnPYBQxAYrk/search/movie/id/imdb/"+ obj.id + "/sources/all/",
-    // url: "http://api.nytimes.com/svc/movies/v2/reviews/search?query=%27how%20to%20lose%20a%20guy%20in%2010%20days%27&api-key=3c03bdd643b85d2306455896d5df614b:14:74709955",
+    success: function(response){
+      obj.picture = response.poster_240x342;
+      obj.guideID = response.id;
+      runHandlebars(obj);
+    },
+    error: function(response) {
+      console.log("In fail function of guidebox");
+    }
+  }) // end of ajax callback
+}
+
+
+
+var getGuideBoxID = function(obj) {
+  $.ajax({
+    url: "https://api-public.guidebox.com/v1.43/US/rKwNUv86qWPdUIaMOejW5NnPYBQxAYrk/search/movie/id/imdb/"+ obj.id + "/sources/all/",
     success: function(response){
       console.log("response is: ", response);
       obj.picture = response.poster_240x342;
@@ -104,28 +128,23 @@ var getGuideBoxID = function(obj) {
     },
     error: function(response) {
       console.log("In fail function of guidebox");
-      // runHandlebars(obj);
     }
   }) // end of ajax callback
-
 }
 
 var getGuideBoxResources = function(obj) {
   $.ajax({
-    // url: 'http://api.nytimes.com/svc/movies/v2/reviews/search?query=%27big%27&api-key=3c03bdd643b85d2306455896d5df614b:14:74709955',
     url: "https://api-public.guidebox.com/v1.43/US/rKwNUv86qWPdUIaMOejW5NnPYBQxAYrk/movie/" + obj.guideID,
-    // url: "http://api.nytimes.com/svc/movies/v2/reviews/search?query=%27how%20to%20lose%20a%20guy%20in%2010%20days%27&api-key=3c03bdd643b85d2306455896d5df614b:14:74709955",
     success: function(response){
       console.log("response is: ", response);
-      // console.log("trying to get hulu ",response.subscription_web_sources[0].display_name);
       if (response.subscription_web_sources.length > 0) {
         obj.sources = [];
+        obj.printResources = true;
         for (var i = 0; i < response.subscription_web_sources.length; i++) {
           obj.sources.push(response.subscription_web_sources[i].display_name);
           console.log("obj.sources is now: ", obj.sources);
         }
       }
-      // obj.sources = response.subscription_web_sources;
       console.log("in getGuideBoxResources, obj is: ", obj);
       runHandlebars(obj)
     },
@@ -134,12 +153,4 @@ var getGuideBoxResources = function(obj) {
       runHandlebars(obj);
     }
   }) // end of ajax callback
-
 }
-// $.ajax({
-//   // url: 'http://api.nytimes.com/svc/movies/v2/reviews/search?query=%27big%27&api-key=3c03bdd643b85d2306455896d5df614b:14:74709955',
-//   url: "http://api.nytimes.com/svc/movies/v2/reviews/search?query=%27how%20to%20lose%20a%20guy%20in%2010%20days%27&api-key=3c03bdd643b85d2306455896d5df614b:14:74709955",
-//   success: function(response){
-//     console.log("Response is: ", response);
-//   }
-// }) // end of ajax callback
