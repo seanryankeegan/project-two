@@ -1,8 +1,11 @@
+var movieKey = '3c03bdd643b85d2306455896d5df614b:14:74709955';
+var guideBoxKey = 'rKwNUv86qWPdUIaMOejW5NnPYBQxAYrk';
+
 document.addEventListener("DOMContentLoaded", function(event){
   console.log("JS Running");
 
-  var movieKey = '3c03bdd643b85d2306455896d5df614b:14:74709955';
-  var guideBoxKey = 'rKwNUv86qWPdUIaMOejW5NnPYBQxAYrk';
+  // var movieKey = '3c03bdd643b85d2306455896d5df614b:14:74709955';
+  // var guideBoxKey = 'rKwNUv86qWPdUIaMOejW5NnPYBQxAYrk';
   var submitButton = document.querySelector('#submit-btn');
   var movieInfo = {};
   var contentContainer = document.querySelector('#content-placeholder');
@@ -14,7 +17,6 @@ document.addEventListener("DOMContentLoaded", function(event){
 
     contentContainer = document.querySelector('#content-placeholder').innerHTML = "";
     contentContainer = document.querySelector('#content-placeholder').appendChild(loadingImg);
-    console.log(contentContainer);
     var movieTitle = document.querySelector('#movie-search').value;
     $.ajax({
       url: "http://www.omdbapi.com/?tomatoes=true&t=" + movieTitle,
@@ -34,7 +36,6 @@ document.addEventListener("DOMContentLoaded", function(event){
           } else {
             movieInfo.timesLinkText = true;
             movieInfo.dontPrint = true;
-            console.log("movieinfo times is: ", movieInfo.timesLinkText);
           }
           if (document.querySelector('#stream_checkbox:checked')){
             movieInfo.printResources = true;
@@ -61,9 +62,7 @@ document.addEventListener("DOMContentLoaded", function(event){
 
 var getReview = function(obj){
   $.ajax({
-    // url: 'http://api.nytimes.com/svc/movies/v2/reviews/search?query=%27big%27&api-key=3c03bdd643b85d2306455896d5df614b:14:74709955',
-    url: "http://api.nytimes.com/svc/movies/v2/reviews/search?query=" + obj.title + "&api-key=3c03bdd643b85d2306455896d5df614b:14:74709955",
-    // url: "http://api.nytimes.com/svc/movies/v2/reviews/search?query=%27how%20to%20lose%20a%20guy%20in%2010%20days%27&api-key=3c03bdd643b85d2306455896d5df614b:14:74709955",
+    url: "http://api.nytimes.com/svc/movies/v2/reviews/search?query=" + obj.title + "&api-key=" + movieKey,
     success: function(response){
       console.log("response is: ", response);
       if (response.results.length == 0) {
@@ -103,7 +102,7 @@ var runHandlebars = function(obj) {
 // ***This function gets the picture from guidebox and appends all info.  Movie poster not available through OMDB API.
 var getPictureOnly = function(obj) {
   $.ajax({
-    url: "https://api-public.guidebox.com/v1.43/US/rKwNUv86qWPdUIaMOejW5NnPYBQxAYrk/search/movie/id/imdb/"+ obj.id + "/sources/all/",
+    url: "https://api-public.guidebox.com/v1.43/US/"+ guideBoxKey + "/search/movie/id/imdb/"+ obj.id + "/sources/all/",
     success: function(response){
       obj.picture = response.poster_240x342;
       obj.guideID = response.id;
@@ -119,7 +118,7 @@ var getPictureOnly = function(obj) {
 
 var getGuideBoxID = function(obj) {
   $.ajax({
-    url: "https://api-public.guidebox.com/v1.43/US/rKwNUv86qWPdUIaMOejW5NnPYBQxAYrk/search/movie/id/imdb/"+ obj.id + "/sources/all/",
+    url: "https://api-public.guidebox.com/v1.43/US/"+guideBoxKey + "/search/movie/id/imdb/"+ obj.id + "/sources/all/",
     success: function(response){
       console.log("response is: ", response);
       obj.picture = response.poster_240x342;
@@ -134,7 +133,7 @@ var getGuideBoxID = function(obj) {
 
 var getGuideBoxResources = function(obj) {
   $.ajax({
-    url: "https://api-public.guidebox.com/v1.43/US/rKwNUv86qWPdUIaMOejW5NnPYBQxAYrk/movie/" + obj.guideID,
+    url: "https://api-public.guidebox.com/v1.43/US/" +guideBoxKey + "/movie/" + obj.guideID,
     success: function(response){
       console.log("response is: ", response);
       if (response.subscription_web_sources.length > 0) {

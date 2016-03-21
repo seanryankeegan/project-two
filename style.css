@@ -1,11 +1,30 @@
 input[type="checkbox"] {
-    margin: 0 3px 0 18px;
+    margin: 0 5px 0 18px;
 }
+
+input {
+  padding: 5px;
+  box-sizing: border-box;
+  border: none;
+}
+
+label {
+    cursor: default;
+    font-size: 22px;
+}
+
+input[type=text] {
+    background-color: #C0C0C0;
+    font-weight: bolder;
+    color: black;
+    padding: 8px 5px;
+    margin-bottom: 13px;
+}
+
 
 body {
   background-color: darkgrey;
   text-align: center;
-  /*font-family: 'Rock Salt', cursive;*/
   font-family: 'Coming Soon', cursive;
   color:white;
 }
@@ -14,11 +33,16 @@ body {
   margin: 0 auto;
 }
 
-#title {
+#main_title {
   font-family: 'Codystar', cursive;
   font-size: 77px;
   margin-top: 0px;
   margin-bottom: 5px;
+}
+
+#movie_title {
+  margin-bottom: 7px;
+  margin-top: -14px;
 }
 
 li {
@@ -33,7 +57,7 @@ button:hover {
 button {
     border-style: outset;
     margin-top: 4px;
-    padding: 0px 22px;
+    padding: 10px 22px 0px 22px;
     background: grey;
     color: darkgrey;
     font-size: 50px;
@@ -69,4 +93,23 @@ span {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+}
+
+
+/*Taken from https://css-tricks.com/snippets/css/style-placeholder-text/
+  Used to change the color of my input box.*/
+::-webkit-input-placeholder {
+   color:#778899;
+}
+
+:-moz-placeholder { /* Firefox 18- */
+   color: #778899;
+}
+
+::-moz-placeholder {  /* Firefox 19+ */
+   color: #778899;
+}
+
+:-ms-input-placeholder {
+   color: #778899;
 }

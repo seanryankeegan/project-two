@@ -8,7 +8,7 @@
   <body>
 
     <div class="header">
-      <h1 id="title">Movie info</h1>
+      <h1 id="main_title">Movie info</h1>
     </div>
 
     <div class="all_content">
@@ -35,7 +35,7 @@
     </div>
 
     <script id="movie_template" type="text/x-handlebars-template">
-      <h1>{{title}}</h1>
+      <h1 id="movie_title">{{title}}</h1>
       <div class = "parent_container">
         <div class = "hb_content column">
           <p><img src="{{picture}}"></p>
@@ -57,7 +57,7 @@
               <p></p>
               {{else}}
               <p><b>Reviews:</b></p>
-              <a href="{{timesURL}}">{{timesLinkText}}</a>
+              <a href="{{timesURL}}" target="_blank">{{timesLinkText}}</a>
               {{/if}}
           {{else}}
           <p><span>No NY Times review available.</span></p>
